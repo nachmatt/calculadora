@@ -1,54 +1,74 @@
 import React, { useState } from 'react';
 import './App.css';
 
-
-// toexponential, solo cuando result es mayor a 10
+// toexponential, solo cuando actualValue es mayor a 10 
 // tercer variable para reoperar luego de hacer una cuenta
+// memo mantiene una sola operacion (concat de actuaValue)
 function App() {
-  const [result, setResult] = useState("")
-  const [memo, setMemo] = useState('')
-  const [aux, setAux] = useState(true)
+  const [actualValue, setActualValue] = useState('')
+  const [result, setResult] = useState('')
+  const [memo, setMemo] = useState([])
+
+  // const handleClick = (e) => {
+  //   if(actualValue.length > 10 ){
+  //     return;
+  //   }
+  //   if(memo !== '' && aux) {
+  //     setActualValue()
+  //     setAux(false);
+  //   } else {
+  //     setActualValue(actualValue.concat(e.target.innerText))
+  //   }
+  // }
 
   const handleClick = (e) => {
-    if(result.length > 10 ){
-      return;
-    }
-    if(memo !== '' && aux) {
-      setResult(e.target.innerText)
-      setAux(false);
-    } else {
-      setResult(result.concat(e.target.innerText))
-    }
-    
+    setActualValue(actualValue + e.target.innerText)
   }
 
   const clear = () => {
-    setResult("")
-    setMemo("")
+    setActualValue('')
+    setResult('')
+    setMemo('')
   }
 
   const backspace = () => {
-    setResult(result.slice(0, -1))
+    setActualValue(actualValue.slice(0, -1))
   }
-  
+
+// if(actualValue.length > 10 ){
+//   return;
+// }
 
   const calculate = () => {
-    try{
-      if(memo === ''){
-        setMemo(result)
-        setResult(eval(result).toExponential(3).toString())
-        setAux(true)
-      } else {
-        setMemo(result)
-        setResult(eval(result).toExponential(3).toString())
-        setAux(true)
-      }
-      
-    }
-    catch(err){
-      setResult('error')
+    if(result === ''){
+      setResult(eval(actualValue))
+    } else {
+        //utilizar memo como biblioteca de los valores de actual value y result
+        //
     }
   }
+
+
+    /* try{
+      if(memo === ''){
+        setResult(eval(actualValue).toString())
+        setMemo(result + actualValue)
+        setActualValue("")
+        setAux(true)
+      } else {
+        setResult(eval(memo.concat(actualValue)).toString())
+        setMemo(result.concat(actualValue))
+        setAux(true)
+      }
+    } catch (error) {
+    console.error(error);
+
+    // !result && actualValue
+
+    catch(err){
+      setActualValue('error')
+    } */
+  
 
   return (
     <div className='body'>
@@ -56,8 +76,8 @@ function App() {
       <div className='calculadora'>
 
         <div className="display">
-          <h2 className="historial_display">{memo}</h2>
-          <h2 className="numero_display">{result}</h2>
+          <h2 className="historial_display">{actualValue}</h2>
+          <h2 className="numero_display">{result ? result : memo}</h2>
         </div>
 
         <div className='botones'>
