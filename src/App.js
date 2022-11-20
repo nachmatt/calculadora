@@ -7,67 +7,44 @@ import './App.css';
 function App() {
   const [actualValue, setActualValue] = useState('')
   const [result, setResult] = useState('')
-  const [memo, setMemo] = useState([])
-
-  // const handleClick = (e) => {
-  //   if(actualValue.length > 10 ){
-  //     return;
-  //   }
-  //   if(memo !== '' && aux) {
-  //     setActualValue()
-  //     setAux(false);
-  //   } else {
-  //     setActualValue(actualValue.concat(e.target.innerText))
-  //   }
-  // }
+  const [memo, setMemo] = useState('')
+  const [memo2, setMemo2] = useState('')
+  const [operator, setOperator] = useState('')
 
   const handleClick = (e) => {
     setActualValue(actualValue + e.target.innerText)
+    if(!Number(e.target.innerText)) {
+      setOperator(e.target.innerText)
+      
+    }
   }
 
   const clear = () => {
     setActualValue('')
     setResult('')
     setMemo('')
+    setMemo2('')
   }
 
   const backspace = () => {
     setActualValue(actualValue.slice(0, -1))
   }
 
-// if(actualValue.length > 10 ){
-//   return;
-// }
-
   const calculate = () => {
     if(result === ''){
       setResult(eval(actualValue))
+      setMemo(actualValue)
+      setMemo2(result)
+      setActualValue('')
     } else {
-        //utilizar memo como biblioteca de los valores de actual value y result
-        //
+      let concatDelResult = operator.concat(result)
+      let aux = actualValue.toString().concat(concatDelResult)
+      setActualValue('')
+      setResult(eval(aux))
+      setMemo(actualValue)
+      setMemo2(result)
     }
   }
-
-
-    /* try{
-      if(memo === ''){
-        setResult(eval(actualValue).toString())
-        setMemo(result + actualValue)
-        setActualValue("")
-        setAux(true)
-      } else {
-        setResult(eval(memo.concat(actualValue)).toString())
-        setMemo(result.concat(actualValue))
-        setAux(true)
-      }
-    } catch (error) {
-    console.error(error);
-
-    // !result && actualValue
-
-    catch(err){
-      setActualValue('error')
-    } */
   
 
   return (
@@ -76,9 +53,9 @@ function App() {
       <div className='calculadora'>
 
         <div className="display">
-          <h2 className="historial_display">{actualValue}</h2>
-          <h2 className="numero_display">{result ? result : memo}</h2>
-        </div>
+          <h2 className="historial_display">{!actualValue ? actualValue : memo + operator + memo2}</h2>
+          <h2 className="numero_display">{result ? result : actualValue}</h2>
+        </div>  
 
         <div className='botones'>
           <button onClick={clear} className="operadores naranja">C</button>
